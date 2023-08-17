@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Social Network{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+    </head>
+    <body>
+
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#"><img src="{% static 'logo.png' %}" width='48px' height='48px' alt="Logo"></a> 
+                    <div>
+                      <ul class="navbar-nav mr-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Following</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                            </li>
+                        {% endif %}
+                      </ul>
+                    </div>
+                  </nav>
+                <div class="card mt-4">
+                    <div class="card-header">
+                      Create a Y post
+                    </div>
+                    <div class="card-body">
+                      <form>
+                        <div class="form-group">
+                          <input type="create-post" class="form-control" id="create-post" aria-describedby="createPost" placeholder="What's happening">
+                          <small id="createPost" class="form-text text-muted">Up to 244 characters</small>
+                        </div>
+                    </form>
+                        <a href="#" class="btn btn-dark">Create Y</a>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <body>
+            <div class="body">
+                <div class="row justify-content-center">
+                    <div class="col-9 mt-4">
+                        {% block body %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </body>
+</html>
