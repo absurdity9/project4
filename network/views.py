@@ -10,12 +10,23 @@ def index(request):
     user_id = request.user.id
     return render(request, "network/index.html")
 
-def createpost(request, data):
+def create_post(request, data):
     user_id = request.user.id
     content_text = data["create-post"]
     # create records
     post = Post.objects.create(user=user_id, content=content_text)
     return post
+
+def handle_create_form(request):
+    # Composing a new email must be via POST
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    data = json.loads(request.body)
+    post = data.get("postcontent")
+
+    
+    return JsonResponse({"message": "Y post created!"}, status=201)
 
 def login_view(request):
     if request.method == "POST":
