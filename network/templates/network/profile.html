@@ -1,0 +1,93 @@
+{% extends 'network/layout.html' %}
+{% load static %}
+
+{% block body %}
+  <div class="body">
+    <div class="row justify-content-center">
+      <div class="col-9 mt-2">
+        <div id="postscontainer"></div>
+        <div id="myprofilecontainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var userId = {{ user_id }};
+    // On load logic
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchPosts(userId)
+      // Create posts if form button is clicked
+      document.querySelector('form').onsubmit = function (event) {
+        event.preventDefault()
+        const post = document.querySelector('#post').value
+        fetch('/create', {
+          method: 'POST',
+          body: JSON.stringify({
+            postcontent: post
+          })
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            // Display success message in modal
+              location.reload();
+          })
+          .catch((error) => {
+            // Handle error
+            console.error('An error occurred:', error)
+          })
+      }
+    })
+    
+    // Create a feed of posts based on the user id
+    function fetchPosts(user_id) {
+      fetch(`/feed/${user_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+          data.forEach((post) => {
+            const post_id = post.id
+            const content = post.content
+            const likes = post.likes
+            const unlikes = post.unlikes
+            const date_created = post.date_created
+            const user_id = post.user
+            const username = post.username
+    
+            // Display each post in a div
+            const postDiv = document.createElement('div')
+            postDiv.classList.add('card', 'card-body', 'mb-3')
+    
+            // Display content in h5
+            const headerElement = document.createElement('h5')
+            headerElement.classList.add('card-title')
+            headerElement.textContent = content
+    
+            // Display other info
+            const postElement = document.createElement('p')
+            postElement.classList.add('card-text')
+    
+            // Create a clickable username link
+            const usernameLink = document.createElement('a')
+            usernameLink.textContent = `${username} ·  ${date_created}`
+            usernameLink.href = `/profile/${user_id}`
+    
+            // Append the username link and line break to postElement
+            postElement.appendChild(usernameLink)
+            postElement.appendChild(document.createElement('br'))
+            postElement.innerHTML += `Likes: ${likes} <i class="far fa-thumbs-up"></i>  <br> `
+    
+            // Append header and post elements to postDiv
+            postDiv.appendChild(headerElement)
+            postDiv.appendChild(postElement)
+    
+            const postsContainer = document.querySelector('#postscontainer')
+            postsContainer.appendChild(postDiv)
+          })
+        })
+        .catch((error) => {
+          console.error('An error occurred:', error)
+          // Handle the error
+        })
+    }
+  </script>
+{% endblock %}

@@ -15,3 +15,14 @@ class Post(models.Model):
 
     def __str__(self):
         return f"Post {self.id} by {self.user.username}"
+    
+    def serialize(self):
+        return{
+            "id":self.id,
+            "user":self.user.id,
+            "username":self.user.username,
+            "content":self.content,
+            "likes":self.likes,
+            "unlikes":self.unlikes,
+            "date_created":self.date_created.strftime("%b %d %Y, %I:%M %p"),
+        }
