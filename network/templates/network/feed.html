@@ -4,17 +4,27 @@
 {% block body %}
   <div class="body">
     <div class="row justify-content-center">
-      <div class="col-9 mt-2">
-        <div id="postscontainer"></div>
-        <div id="myprofilecontainer"></div>
+        <div class="col-3 mt-2">
+          <div id="myprofilecontainer"></div>
+          <div id="followers" class="mt-3">Followers: 2</div>
+          <div id="followedby" class="mt-3">Following: 1</div>
+          <div id="ctas" class="mt-3">
+            <button type="button" id='follow' class="btn btn-success">Follow</button>
+            <button type="button" id='unfollow' class="btn btn-danger">Unfollow</button>
+          </div>
+      </div>
+      <div class="col-6 mt-2">
+        <div id="postscontainer"></div
       </div>
     </div>
   </div>
 
   <script>
+    // Get userID from local storage
+    var userId = {{ user_id }};
     // On load logic
     document.addEventListener('DOMContentLoaded', function () {
-      fetchPosts(99999)
+      fetchPosts(userId)
       // Create posts if form button is clicked
       document.querySelector('form').onsubmit = function (event) {
         event.preventDefault()
@@ -87,9 +97,6 @@
           console.error('An error occurred:', error)
           // Handle the error
         })
-
-        // On click usernameLink, store to local storage
-        
     }
   </script>
 {% endblock %}
