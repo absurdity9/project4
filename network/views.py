@@ -14,10 +14,12 @@ def index(request):
     user_id = request.user.id
     return render(request, "network/index.html")
 
-def profile(request):
+def profile(request,):
     user_id = request.user.id
     return render(request, "network/profile.html", {'user_id': user_id})
 
+def userprofile(request, user_id):
+    return render(request, "network/userprofile.html", {'user_id': user_id})
 
 @csrf_exempt
 @login_required

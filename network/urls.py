@@ -9,6 +9,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("profile", views.profile, name="profile"),
+    path("userprofile/<int:user_id>", views.userprofile, name="userprofile"),
     # API Routes
     path("create", views.handle_create_form, name="handle_create_form"),
     # Find a post by ID
