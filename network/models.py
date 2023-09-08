@@ -26,3 +26,9 @@ class Post(models.Model):
             "unlikes":self.unlikes,
             "date_created":self.date_created.strftime("%b %d %Y, %I:%M %p"),
         }
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    followed = models.ManyToManyField(User, related_name='followers')
+
+    def __str__(self):
+        return f'{self.follower.username} follows {self.followed.username}'

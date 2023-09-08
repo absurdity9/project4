@@ -51,7 +51,7 @@ def posts(request, post_id):
     # Return contents
     if request.method == "GET":
         return JsonResponse(post.serialize())
-    # Email must be via GET or PUT
+    # Post must be via GET or PUT
     else:
         return JsonResponse({
             "error": "GET or PUT request required."
@@ -78,7 +78,6 @@ def handle_create_form(request):
         
     saved_post = create_post(request, post)
     return JsonResponse({"message": "Post created successfully!", "post": saved_post.id}, status=201)
-
 
 def login_view(request):
     if request.method == "POST":
