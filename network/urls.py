@@ -16,4 +16,6 @@ urlpatterns = [
     path("posts/<int:post_id>", views.posts, name="posts"),
     # View feed by user_id
     path("feed/<int:user_id>", views.feed, name="feed"),
+    # Add current user as a follower
+    path("addfollow/<int:user_id>", views.addfollow, name="addfollow")
 ]

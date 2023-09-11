@@ -4,14 +4,10 @@
 {% block body %}
   <div class="body">
     <div class="row justify-content-center">
-        <div class="col-3 mt-2">
-          <div id="myprofilecontainer"></div>
-          <div id="followers" class="mt-3">Followers: 2</div>
-          <div id="followedby" class="mt-3">Following: 1</div>
-          <div id="ctas" class="mt-3">
-            <button type="button" id='follow' class="btn btn-success">Follow</button>
-            <button type="button" id='unfollow' class="btn btn-danger">Unfollow</button>
-          </div>
+        <div class="card card-body col-3 mt-2"> 
+          <div id="myprofilecontainer"><h2>Profile for {{username}}</h2></div>
+          <div id="followers" class="mt-3">Followers: {{ followers_count }} </div>
+          <div id="followedby" class="mt-3">Following: {{ following_count }}</div>
       </div>
       <div class="col-6 mt-2">
         <div id="postscontainer"></div

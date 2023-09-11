@@ -1,26 +1,70 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import User, Post
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+from .models import User, Post, Follow
 import json
 
 def index(request):
     user_id = request.user.id
     return render(request, "network/index.html")
 
-def profile(request,):
+def profile(request):
     user_id = request.user.id
-    return render(request, "network/profile.html", {'user_id': user_id})
+    user = User.objects.get(id=user_id)
+    username = user.username
+    
+    followers = Follow.objects.filter(followed=user)
+    followers_count = followers.count()
+    
+    following = Follow.objects.filter(follower=user)
+    following_count = following.count()
+        
+    return render(request, "network/profile.html", {
+        'user_id': user_id,
+        'followers_count':followers_count,
+        'following_count':following_count,
+        'username':username,
+        })
 
 def userprofile(request, user_id):
-    return render(request, "network/userprofile.html", {'user_id': user_id})
+    user = user_id
+    user_object = User.objects.get(id=user_id)
+    username = user_object.username
 
+    followers = Follow.objects.filter(followed=user)
+    followers_count = followers.count()
+    
+    following = Follow.objects.filter(follower=user)
+    following_count = following.count()
+    
+    return render(request, "network/userprofile.html", {
+        'followers_count': followers_count,
+        'following_count': following_count,
+        'user_id': user_id,
+        'username':username,
+    })
+
+def addfollow(request, user_id):
+    try:
+        follower_userid = request.user.id
+        follower_object = User.objects.get(id=follower_userid)
+        followed_object = User.objects.get(id=user_id)
+        follow = Follow.objects.create(follower=follower_object)
+        follow.followed.add(followed_object)
+        return JsonResponse({'success': True, 'message': 'Success!'})
+    except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("User does not exist. Please try again.")
+    except Exception as e:
+        raise Exception(f"An error occurred: {str(e)}")
+    
 @csrf_exempt
 @login_required
 def feed(request, user_id):
