@@ -97,7 +97,7 @@
           // Handle the error
         })
     }
-
+    // Add follow
     const followButton = document.getElementById('follow');
     followButton.addEventListener('click', function(){
       console.log("Clicked")
@@ -127,5 +127,34 @@
       });
     });
 
+    // Remove follow
+    const followButton = document.getElementById('unfollow');
+    followButton.addEventListener('click', function(){
+      console.log("Clicked")
+      fetch(`/removefollow/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        if (data.success) {
+          // Display a success message
+          alert(data.message);
+          // Refresh the page
+          window.location.reload();
+        } else {
+          // Display an error message
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any error that occurs during the request
+        console.error('An error occurred:', error);
+      });
+    });
   </script>
 {% endblock %}

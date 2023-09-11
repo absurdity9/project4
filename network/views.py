@@ -57,14 +57,30 @@ def addfollow(request, user_id):
         follower_userid = request.user.id
         follower_object = User.objects.get(id=follower_userid)
         followed_object = User.objects.get(id=user_id)
+        username=followed_object.username
         follow = Follow.objects.create(follower=follower_object)
         follow.followed.add(followed_object)
-        return JsonResponse({'success': True, 'message': 'Success!'})
+        return JsonResponse({'success': True, 'message': f'You followed {username}!'})
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist("User does not exist. Please try again.")
     except Exception as e:
         raise Exception(f"An error occurred: {str(e)}")
     
+def removefollow(request,user_id):
+    try: 
+        follower_userid = request.user.id
+        follower_object = User.objects.get(id=follower_userid)
+        followed_object = User.objects.get(id=user_id)
+        username=followed_object.username
+
+        follow = Follow.objects.get(follower=follower_userid)
+        follow.followed.remove(followed=followed_object)
+        return JsonResponse({'success': True, 'message': f'You unfollowed  {username}!'})
+    except ObjectDoesNotExist:
+        raise ObjectDoesNotExist("User does not exist. Please try again.")
+    except Exception as e:
+        raise Exception(f"An error occurred: {str(e)}")
+
 @csrf_exempt
 @login_required
 def feed(request, user_id):
