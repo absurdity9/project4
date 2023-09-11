@@ -73,8 +73,8 @@ def removefollow(request,user_id):
         followed_object = User.objects.get(id=user_id)
         username=followed_object.username
 
-        follow = Follow.objects.get(follower=follower_userid)
-        follow.followed.remove(followed=followed_object)
+        follow = Follow.objects.get(follower=follower_userid, followed=followed_object)
+        follow.delete()
         return JsonResponse({'success': True, 'message': f'You unfollowed  {username}!'})
     except ObjectDoesNotExist:
         raise ObjectDoesNotExist("User does not exist. Please try again.")

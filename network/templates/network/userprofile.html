@@ -21,6 +21,7 @@
 
   <script>
     var userId = {{ user_id }};
+    console.log(userId);
     // On load logic
     document.addEventListener('DOMContentLoaded', function () {
       fetchPosts(userId)
@@ -44,7 +45,7 @@
             console.error('An error occurred:', error)
           })
       }
-    })
+    });
     
     // Create a feed of posts based on the user id
     function fetchPosts(user_id) {
@@ -96,11 +97,11 @@
           console.error('An error occurred:', error)
           // Handle the error
         })
-    }
+    };
     // Add follow
     const followButton = document.getElementById('follow');
     followButton.addEventListener('click', function(){
-      console.log("Clicked")
+      console.log("Clicked");
       fetch(`/addfollow/${userId}`, {
         method: 'POST',
         headers: {
@@ -128,8 +129,8 @@
     });
 
     // Remove follow
-    const followButton = document.getElementById('unfollow');
-    followButton.addEventListener('click', function(){
+    const unfollowButton = document.getElementById('unfollow');
+    unfollowButton.addEventListener('click', function(){
       console.log("Clicked")
       fetch(`/removefollow/${userId}`, {
         method: 'POST',
