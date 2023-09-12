@@ -19,7 +19,27 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchAllPosts(followsIds).then(({ allPostsSorted }) => {
     console.log(allPostsSorted);
     displayPosts(allPostsSorted);
-    // Additional code for handling the fetched and formatted posts or any other operations
+    
+    // Create posts if form button is clicked
+    document.querySelector('form').onsubmit = function (event) {
+      event.preventDefault()
+      const post = document.querySelector('#post').value
+      fetch('/create', {
+        method: 'POST',
+        body: JSON.stringify({
+          postcontent: post
+        })
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          // Display success message in modal
+            location.reload();
+        })
+        .catch((error) => {
+          // Handle error
+          console.error('An error occurred:', error)
+        })
+    }
   });
 
 // Fetch all posts
