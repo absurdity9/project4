@@ -87,7 +87,7 @@ function displayPosts(posts) {
     // Create a clickable username link
     const usernameLink = document.createElement('a');
     usernameLink.textContent = `${username} ·  ${date_created}`;
-    usernameLink.href = `/profile/${user_id}`;
+    usernameLink.href = `/userprofile/${user_id}`;
 
     // Append the username link and line break to postElement
     postElement.appendChild(usernameLink);

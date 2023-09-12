@@ -50,12 +50,12 @@ def userprofile(request, user_id):
     try:
         follow_object = Follow.objects.get(follower=current_user, followed=profile_user)
         if follow_object:
-            relationship_exists = True
+            relationship_exists = 'true'
         else:
-            relationship_exists = False
+            relationship_exists = 'false'
 
     except Follow.DoesNotExist:
-        relationship_exists = False
+        relationship_exists = 'false'
 
     return render(request, "network/userprofile.html", {
         'followers_count': followers_count,
