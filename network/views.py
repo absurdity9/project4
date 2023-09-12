@@ -36,8 +36,10 @@ def profile(request):
 
 def userprofile(request, user_id):
     user = user_id
-    user_object = User.objects.get(id=user_id)
-    username = user_object.username
+    currentUserId = request.user.id
+    current_user = User.objects.get(id=currentUserId)
+    profile_user = User.objects.get(id=user_id)
+    username = current_user.username
 
     followers = Follow.objects.filter(followed=user)
     followers_count = followers.count()
@@ -45,11 +47,22 @@ def userprofile(request, user_id):
     following = Follow.objects.filter(follower=user)
     following_count = following.count()
     
+    try:
+        follow_object = Follow.objects.get(follower=current_user, followed=profile_user)
+        if follow_object:
+            relationship_exists = True
+        else:
+            relationship_exists = False
+
+    except Follow.DoesNotExist:
+        relationship_exists = False
+
     return render(request, "network/userprofile.html", {
         'followers_count': followers_count,
         'following_count': following_count,
         'user_id': user_id,
         'username':username,
+        'relationship_exists': relationship_exists
     })
 
 def addfollow(request, user_id):
@@ -73,7 +86,7 @@ def removefollow(request,user_id):
         followed_object = User.objects.get(id=user_id)
         username=followed_object.username
 
-        follow = Follow.objects.get(follower=follower_userid, followed=followed_object)
+        follow = Follow.objects.get(follower=follower_object, followed=followed_object)
         follow.delete()
         return JsonResponse({'success': True, 'message': f'You unfollowed  {username}!'})
     except ObjectDoesNotExist:
@@ -81,17 +94,27 @@ def removefollow(request,user_id):
     except Exception as e:
         raise Exception(f"An error occurred: {str(e)}")
 
+@login_required
+def following(request):
+    userId = request.user.id
+    current_user = User.objects.get(id=userId)
+
+    current_user_follows_ids = current_user.following.values_list('followed', flat=True)
+    
+    follows_ids_json = json.dumps(list(current_user_follows_ids)) 
+    return render (request, "network/following.html",{
+        'follows_ids_json': follows_ids_json
+    })
+
 @csrf_exempt
 @login_required
 def feed(request, user_id):
     try:
         # 99999 are all users
         if int(user_id) == 99999:
-            print("All")
             posts = Post.objects.all()
         # filter all posts matching the user_id
         else:
-            print(user_id)
             posts = Post.objects.filter(user=user_id)
         posts = posts.order_by("-date_created").all()
         return JsonResponse([post.serialize() for post in posts], safe=False)

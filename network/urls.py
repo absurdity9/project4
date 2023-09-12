@@ -18,6 +18,7 @@ urlpatterns = [
     path("feed/<int:user_id>", views.feed, name="feed"),
     # Add/remove current user as a follower
     path("addfollow/<int:user_id>", views.addfollow, name="addfollow"),
-    path("removefollow/<int:user_id>", views.removefollow, name="removefollow")
-
+    path("removefollow/<int:user_id>", views.removefollow, name="removefollow"),
+    # Following page
+    path("following", views.following, name="following")
 ]

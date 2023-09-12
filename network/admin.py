@@ -2,7 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import User, Post, Follow
-admin.site.register(User)
 admin.site.register(Follow)
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -10,4 +9,6 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('user', 'date_created')
     search_fields = ('content', 'user__username') 
     
-
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display=('id', 'username', 'date_joined')
