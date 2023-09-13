@@ -8,7 +8,8 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'content', 'likes', 'unlikes', 'date_created')
     list_filter = ('user', 'date_created')
     search_fields = ('content', 'user__username') 
-    
+    list_editable = ('content', 'likes', 'unlikes')
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display=('id', 'username', 'date_joined')

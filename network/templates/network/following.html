@@ -70,6 +70,7 @@ function displayPosts(posts) {
 
   posts.forEach(post => {
     const { id: post_id, content, likes, unlikes, date_created, user: user_id, username } = post;
+    const totalLikes = likes - unlikes
 
     // Display each post in a div
     const postDiv = document.createElement('div');
@@ -92,7 +93,7 @@ function displayPosts(posts) {
     // Append the username link and line break to postElement
     postElement.appendChild(usernameLink);
     postElement.appendChild(document.createElement('br'));
-    postElement.innerHTML += `Likes: ${likes} <i class="far fa-thumbs-up"></i>  <br> `;
+    postElement.innerHTML += `Likes: ${totalLikes} <i class="far fa-thumbs-up"></i>  <br> `;
 
     // Append header and post elements to postDiv
     postDiv.appendChild(headerElement);
