@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -139,6 +139,18 @@ def posts(request, post_id):
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)
+
+def like (request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.likes += 1
+    post.save()
+    return JsonResponse({'success': True})
+
+def unlike (request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.unlikes += 1
+    post.save()
+    return JsonResponse({'success': True})
         
 def create_post(request, post):
     user_id = request.user
