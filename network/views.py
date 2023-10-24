@@ -39,7 +39,7 @@ def userprofile(request, user_id):
     currentUserId = request.user.id
     current_user = User.objects.get(id=currentUserId)
     profile_user = User.objects.get(id=user_id)
-    username = current_user.username
+    username = profile_user.username
 
     followers = Follow.objects.filter(followed=user)
     followers_count = followers.count()
