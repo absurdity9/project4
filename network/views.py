@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 from django.contrib import messages
 from .models import User, Post, Follow
 import json
@@ -109,6 +110,7 @@ def following(request):
 @csrf_exempt
 @login_required
 def feed(request, user_id):
+
     try:
         # 99999 are all users
         if int(user_id) == 99999:
@@ -116,8 +118,17 @@ def feed(request, user_id):
         # filter all posts matching the user_id
         else:
             posts = Post.objects.filter(user=user_id)
-        posts = posts.order_by("-date_created").all()
-        return JsonResponse([post.serialize() for post in posts], safe=False)
+        
+        posts = posts.order_by("-date_created")
+        paginator = Paginator(posts, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        serialized_posts = [post.serialize() for post in page_obj]
+        print("Total posts count:", paginator.count)  # Print the total posts count
+        print("Page range:", paginator.page_range)  # Print the page range
+        print("Current page:", page_obj.number)  # Print the current page number
+        return JsonResponse(serialized_posts, safe=False)
         
     except ValueError:
         print("User_ID is not an integer")
