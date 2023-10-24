@@ -128,7 +128,14 @@ def feed(request, user_id):
         print("Total posts count:", paginator.count)  # Print the total posts count
         print("Page range:", paginator.page_range)  # Print the page range
         print("Current page:", page_obj.number)  # Print the current page number
-        return JsonResponse(serialized_posts, safe=False)
+        
+        context = {
+            'serialized_posts': serialized_posts,
+            'paginator': paginator,
+            'page_obj': page_obj
+        }
+        
+        return JsonResponse(context, safe=False)
         
     except ValueError:
         print("User_ID is not an integer")

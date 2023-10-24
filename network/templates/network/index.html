@@ -61,53 +61,52 @@
       fetch(`/feed/${user_id}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
-          data.forEach((post) => {
-            const post_id = post.id
-            const content = post.content
-            const likes = post.likes
-            const unlikes = post.unlikes
-            const totalLikes = likes - unlikes
-            const date_created = post.date_created
-            const user_id = post.user
-            const username = post.username
+          console.log(data);
+          const serializedPosts = data;
+          serializedPosts.forEach((post) => {
+            const post_id = post.id;
+            const content = post.content;
+            const likes = post.likes;
+            const unlikes = post.unlikes;
+            const totalLikes = likes - unlikes;
+            const date_created = post.date_created;
+            const user_id = post.user;
+            const username = post.username;
     
             // Display each post in a div
-            const postDiv = document.createElement('div')
-            postDiv.classList.add('card', 'card-body', 'mb-3')
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('card', 'card-body', 'mb-3');
     
             // Display content in h5
-            const headerElement = document.createElement('h5')
-            headerElement.classList.add('card-title')
-            headerElement.textContent = content
+            const headerElement = document.createElement('h5');
+            headerElement.classList.add('card-title');
+            headerElement.textContent = content;
     
             // Display other info
-            const postElement = document.createElement('p')
-            postElement.classList.add('card-text')
+            const postElement = document.createElement('p');
+            postElement.classList.add('card-text');
     
             // Create a clickable username link
-            const usernameLink = document.createElement('a')
-            usernameLink.textContent = `${username} ·  ${date_created}`
-            usernameLink.href = `/userprofile/${user_id}`
+            const usernameLink = document.createElement('a');
+            usernameLink.textContent = `${username} ·  ${date_created}`;
+            usernameLink.href = `/userprofile/${user_id}`;
     
             // Append the username link and line break to postElement
-            postElement.appendChild(usernameLink)
-            postElement.appendChild(document.createElement('br'))
-            postElement.innerHTML += `Likes: ${totalLikes} <i class="far fa-thumbs-up"></i> <br>`;    
+            postElement.appendChild(usernameLink);
+            postElement.appendChild(document.createElement('br'));
+            postElement.innerHTML += `Likes: ${totalLikes} <i class="far fa-thumbs-up"></i> <br>`;
             // Append header and post elements to postDiv
-            postDiv.appendChild(headerElement)
-            postDiv.appendChild(postElement)
+            postDiv.appendChild(headerElement);
+            postDiv.appendChild(postElement);
     
-            const postsContainer = document.querySelector('#postscontainer')
-            postsContainer.appendChild(postDiv)
-          })
+            const postsContainer = document.querySelector('#postscontainer');
+            postsContainer.appendChild(postDiv);
+          });
         })
         .catch((error) => {
-          console.error('An error occurred:', error)
+          console.error('An error occurred:', error);
           // Handle the error
-        })
-        // On click usernameLink, store to local storage
-        
+        });
     }
   </script>
 {% endblock %}
