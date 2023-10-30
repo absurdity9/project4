@@ -131,8 +131,10 @@ def feed(request, user_id):
         
         context = {
             'serialized_posts': serialized_posts,
-            'paginator': paginator,
-            'page_obj': page_obj
+            'paginator': {
+                'current_page': page_obj.number,
+                'num_pages': paginator.num_pages
+            }
         }
         
         return JsonResponse(context, safe=False)

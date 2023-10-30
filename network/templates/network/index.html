@@ -62,7 +62,8 @@
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          const serializedPosts = data;
+          const serializedPosts = data.serialized_posts;
+          const currentPage = data.paginator.current_page; 
           serializedPosts.forEach((post) => {
             const post_id = post.id;
             const content = post.content;
