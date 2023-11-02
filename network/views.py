@@ -160,12 +160,14 @@ def posts(request, post_id):
             "error": "GET or PUT request required."
         }, status=400)
 
+@csrf_exempt
 def like (request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.likes += 1
     post.save()
     return JsonResponse({'success': True})
 
+@csrf_exempt
 def unlike (request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.unlikes += 1

@@ -130,12 +130,29 @@
         // Create a clickable username link
         const usernameLink = document.createElement("a");
         usernameLink.textContent = `${username} ·  ${date_created}`;
-        usernameLink.href = `/profile/${user_id}`;
+        usernameLink.href = `/userprofile/${user_id}`;
     
         // Append the username link and line break to postElement
         postElement.appendChild(usernameLink);
         postElement.appendChild(document.createElement("br"));
-        postElement.innerHTML += `Likes: ${likes} <i class="far fa-thumbs-up"></i><br>`;
+
+        // Create a clickable "Likes" link with the thumbs-up icon
+        const likesLink = document.createElement("a");
+        likesLink.href = "#"; // Set the appropriate URL for the like functionality
+        likesLink.textContent = `Likes: ${likes} `;
+        
+        // Create the thumbs-up icon element
+        const thumbsUpIcon = document.createElement("i");
+        thumbsUpIcon.classList.add("far", "fa-thumbs-up");
+        
+        // Add an event listener to the likes link
+        likesLink.addEventListener("click", () => likePost(post_id));
+        
+        // Append the thumbs-up icon to the likes link
+        likesLink.appendChild(thumbsUpIcon);
+        
+        // Append the likes link to postElement
+        postElement.appendChild(likesLink);
     
         // Append header and post elements to postDiv
         postDiv.appendChild(headerElement);
@@ -157,6 +174,28 @@
         });
     }
     
+    function likePost(post_id) {
+      fetch(`/like/${post_id}`, {
+        method: "POST"
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Handle success response, if needed
+            console.log("Post liked successfully!");
+            fetchPosts(userId); // Call the fetchPosts function if like is successful
+          } else {
+            // Handle error response, if needed
+            console.error("Failed to like post.");
+            alert("Failed to like"); // Show an alert if like fails
+          }
+        })
+        .catch(error => {
+          // Handle fetch error, if needed
+          console.error("An error occurred while liking the post:", error);
+        });
+    }
+
     // Initial pagination counter
     updatePaginationCounter();
     
@@ -165,22 +204,11 @@
     
       fetchPosts(userId);
       checkPreviousButtonVisibility();
-      if(relationship_exists) {
-        // Set follow btn -> display none
-        document.getElementById('follow').style.display = 'none';
-        // Set unfollow btn -> display block  
-        document.getElementById('unfollowbtn').style.display = 'block';
-      } else {
-        // Set follow btn -> display block
-        document.getElementById('follow').style.display = 'block';  
-        // Set unfollow btn -> display none
-        document.getElementById('unfollowbtn').style.display = 'none';
-      }
     
       document.querySelector('form').addEventListener('submit', handleFormSubmission);
-    
+
     });
-    
+
       </script>
 
 {% endblock %}
