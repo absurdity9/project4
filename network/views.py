@@ -121,13 +121,13 @@ def feed(request, user_id):
         
         posts = posts.order_by("-date_created")
         paginator = Paginator(posts, 10)
-        page_number = request.GET.get('page')
+        page_number = request.GET.get('page', 1)
+        print("Page number:", page_number)
         page_obj = paginator.get_page(page_number)
         
         serialized_posts = [post.serialize() for post in page_obj]
         print("Total posts count:", paginator.count)  # Print the total posts count
-        print("Page range:", paginator.page_range)  # Print the page range
-        print("Current page:", page_obj.number)  # Print the current page number
+        print("No of page:", paginator.num_pages)  # Print the current page number
         
         context = {
             'serialized_posts': serialized_posts,
@@ -220,6 +220,7 @@ def logout_view(request):
 
 
 def register(request):
+    
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
