@@ -186,7 +186,7 @@
         const postElement = postDiv.querySelector("h5");
         const content = postElement.textContent;
 
-        // Replace the post element with a textarea
+        // Replace the h5 element with a textarea
         const textarea = document.createElement("textarea");
         textarea.value = content;
 
@@ -224,9 +224,30 @@
   }
 
   function editPost(post_id, updatedContent, saveButton) {
+    console.log(post_id);
+    console.log(updatedContent);
     // Perform the necessary logic to update the post content
-    
-    // Front end success
-    console.log(`Editing post ${post_id} with new content: ${updatedContent}`);
-    saveButton.style.display = "none";
+    fetch(`/edit/${post_id}`, {
+      method: 'POST',
+      body: JSON.stringify({ updatedContent: updatedContent }), // Update the field name to 'updatedContent'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.success) {
+          console.log('Post edited successfully!');
+          // Perform any additional actions on success
+          saveButton.style.display = 'none';
+        } else {
+          console.error('Failed to edit post:', data.message);
+          // Handle the error case
+        }
+      })
+      .catch((error) => {
+        console.error('An error occurred while editing the post:', error);
+        // Handle the error case
+      });
   }

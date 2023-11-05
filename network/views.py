@@ -268,21 +268,24 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+@csrf_exempt
 def edit(request, post_id):
+    print("Post ID is:", post_id)
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Post not found'})
 
     if request.method == 'POST':
-        new_content = request.POST.get('updatedContent')
-
-        post.content = new_content
+        request_data = json.loads(request.body)  # Parse the JSON data in the request body
+        updated_content = request_data.get('updatedContent')  # Access the 'updatedContent' field
+        print("Updated content is:", updated_content)
+        post.content = updated_content
 
         try:
             post.save()
             return JsonResponse({'success': True})
         except:
-            return JsonResponse({'success': False})
+            return JsonResponse({'success': False, 'message': 'Cannot save'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
