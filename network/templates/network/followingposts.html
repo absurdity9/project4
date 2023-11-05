@@ -1,0 +1,32 @@
+{% extends 'network/layout.html' %}
+{% load static %}
+
+{% block body %}
+<script src="{% static 'network/js/feed.js' %}"></script> 
+  <div class="body">
+    <div class="row justify-content-center">
+      <div class="col-9 mt-2">
+        <div id="postscontainer"></div>
+        <!-- Pagination Starts -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" ><a class="page-link" href="#" id="previousPageBtn">Previous</a></li>
+            <li class="page-item mt-2 ml-2 mr-2" id="currentPageElement">  1 </li>
+            <li class="page-item" ><a class="page-link" href="#" id="nextPageBtn">Next</a></li>
+          </ul>
+        </nav>
+        <!-- Pagination Ends -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var currentUserId = {{currentUserId}}
+// On load logic
+document.addEventListener('DOMContentLoaded', function () {
+  fetchFollowingPosts();
+  document.querySelector('form').addEventListener('submit', handleFormSubmission);
+  }
+)
+  </script>
+{% endblock %}

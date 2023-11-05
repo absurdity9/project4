@@ -19,10 +19,13 @@ urlpatterns = [
     # Add/remove current user as a follower
     path("addfollow/<int:user_id>", views.addfollow, name="addfollow"),
     path("removefollow/<int:user_id>", views.removefollow, name="removefollow"),
-    # Following page
+    # Following function and page
     path("following", views.following, name="following"),
+    path("followingposts", views.followingposts, name="followingposts"),
     # Like 
     path('like/<int:post_id>', views.like, name='like'),
     # Unlike 
-    path('unlike/<int:post_id>', views.unlike, name='unlike')
+    path('unlike/<int:post_id>', views.unlike, name='unlike'),
+    # Edit post content 
+    path('edit/<int:post_id>', views.edit, name='edit'),
 ]

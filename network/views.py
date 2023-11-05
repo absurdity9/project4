@@ -97,16 +97,34 @@ def removefollow(request,user_id):
     except Exception as e:
         raise Exception(f"An error occurred: {str(e)}")
 
+@csrf_exempt
 @login_required
 def following(request):
-    userId = request.user.id
-    current_user = User.objects.get(id=userId)
-
+    user_id = request.user.id
+    current_user = User.objects.get(id=user_id)
     current_user_follows_ids = current_user.following.values_list('followed', flat=True)
     
-    follows_ids_json = json.dumps(list(current_user_follows_ids)) 
-    return render (request, "network/following.html",{
-        'follows_ids_json': follows_ids_json
+    posts = Post.objects.filter(user__in=current_user_follows_ids)
+    posts = posts.order_by("-date_created")
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    serialized_posts = [post.serialize() for post in page_obj]
+    print("Total posts count:", paginator.count)  # Print the total posts count
+    print("No of page:", paginator.num_pages)  # Print the current page number
+        
+    context = {
+        'serialized_posts': serialized_posts,
+        'paginator': {
+            'current_page': page_obj.number,
+            'num_pages': paginator.num_pages
+        }
+    }
+    return JsonResponse(context, safe=False)
+
+def followingposts(request):
+    return render(request, "network/followingposts.html", {
     })
 
 @csrf_exempt
@@ -249,3 +267,22 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def edit(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Post not found'})
+
+    if request.method == 'POST':
+        new_content = request.POST.get('updatedContent')
+
+        post.content = new_content
+
+        try:
+            post.save()
+            return JsonResponse({'success': True})
+        except:
+            return JsonResponse({'success': False})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
