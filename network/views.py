@@ -65,7 +65,8 @@ def userprofile(request, user_id):
         'following_count': following_count,
         'user_id': user,
         'username':username,
-        'relationship_exists': relationship_exists
+        'relationship_exists': relationship_exists,
+        'currentUserId' : currentUserId,
     })
 
 def addfollow(request, user_id):

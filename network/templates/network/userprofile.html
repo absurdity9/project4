@@ -34,7 +34,7 @@
   var userId = "{{ user_id }}";
   var currentPage = 1;
   var numPages = 1;
-  var currentUserId;
+  var currentUserId = {{ currentUserId }};
 
   // User profile specific
   const unfollowButton = document.getElementById('unfollowbtn');
@@ -97,6 +97,7 @@
   });
 
   document.addEventListener('DOMContentLoaded', function () {
+    attachFormSubmitHandler();
     fetchPosts(userId);
     checkPreviousButtonVisibility();
     if(relationship_exists) {

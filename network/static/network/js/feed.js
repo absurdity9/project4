@@ -5,8 +5,6 @@
   const nextPageElement = document.getElementById("nextPageBtn");
   previousPageElement.addEventListener("click", handlePreviousPageClick);
   nextPageElement.addEventListener("click", handleNextPageClick);
-  // Event handler for creating a post
-  document.querySelector('form').addEventListener('submit', handleFormSubmission);
 
   updatePaginationCounter();
 
@@ -255,4 +253,30 @@
         console.error('An error occurred while editing the post:', error);
         // Handle the error case
       });
+  }
+  
+  function handleFormSubmission(event) {
+    console.log("Create Y btn clicked")
+    event.preventDefault();
+    const post = document.querySelector('#post').value;
+  
+    fetch('/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        postcontent: post
+      })
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        // Display success message in modal
+        location.reload();
+      })
+      .catch((error) => {
+        // Handle error
+        console.error('An error occurred:', error);
+      });
+  }
+
+  function attachFormSubmitHandler() {
+    document.querySelector('form').addEventListener('submit', handleFormSubmission);
   }

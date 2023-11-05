@@ -27,6 +27,7 @@
 
     // On load logic
     document.addEventListener('DOMContentLoaded', function () {
+      attachFormSubmitHandler();
       fetchPosts(userId);
       checkPreviousButtonVisibility();
     });

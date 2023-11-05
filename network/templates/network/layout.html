@@ -48,7 +48,7 @@
                       Create a Y post
                     </div>
                     <div class="card-body">
-                        <form method='post'>
+                        <form method='post' id="create-post-form">
                             {% csrf_token %}
                         <div class="form-group">
                             <input type="text" class="form-control" id="post" aria-describedby="createPost" placeholder="What's happening">
