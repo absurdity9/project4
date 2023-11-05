@@ -14,8 +14,10 @@ from .models import User, Post, Follow
 import json
 
 def index(request):
-    user_id = request.user.id
-    return render(request, "network/index.html")
+    currentUserId = request.user.id
+    return render(request, "network/index.html", {
+        'currentUserId': currentUserId,
+    })
 
 def profile(request):
     user_id = request.user.id

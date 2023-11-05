@@ -23,6 +23,7 @@
     var userId = 99999;
     var currentPage = 1;
     var numPages = 1;
+    var currentUserId = {{currentUserId}}
     const previousPageElement = document.getElementById("previousPageBtn");
     const currentPageElement = document.getElementById("currentPageElement");
     const nextPageElement = document.getElementById("nextPageBtn");
@@ -153,19 +154,81 @@
         
         // Append the likes link to postElement
         postElement.appendChild(likesLink);
-    
+
         // Append header and post elements to postDiv
         postDiv.appendChild(headerElement);
         postDiv.appendChild(postElement);
-    
+
+        // Check if the user_id is equal to currentUserId
+        if (user_id === currentUserId) {
+          // Create the edit button
+          const editButton = document.createElement("button");
+          editButton.classList.add("btn", "btn-info");
+          editButton.textContent = "Edit";
+          editButton.style.maxWidth = "72px";
+          // Add an event listener to the edit button
+          editButton.addEventListener("click", () => handleEditPost(post_id));
+          // Append the edit button to postDiv
+          postDiv.appendChild(editButton);
+        }
+
+        // Function to handle the editing of a post
+        function handleEditPost(post_id) {
+          // Find the post element to be edited
+          const postElement = postDiv.querySelector("h5");
+          const content = postElement.textContent;
+
+          // Replace the post element with a textarea
+          const textarea = document.createElement("textarea");
+          textarea.value = content;
+
+          // Create the save button
+          const saveButton = document.createElement("button");
+          saveButton.textContent = "Save";
+          // Add Bootstrap classes to the save button
+          saveButton.classList.add("btn", "btn-success");
+          saveButton.style.marginTop = "10px";
+
+          // Set the max-width of the button
+          saveButton.style.maxWidth = "72px";
+
+          // Add an event listener to the save button
+          saveButton.addEventListener("click", () => {
+            const updatedContent = textarea.value;
+            // Call the editPost function with the updated content
+            editPost(post_id, updatedContent);
+            // Replace the textarea with the updated post element
+            const updatedPostElement = document.createElement("h5");
+            updatedPostElement.classList.add("card-text");
+            updatedPostElement.textContent = updatedContent+ " (edited)";
+            postDiv.replaceChild(updatedPostElement, textarea);
+
+          });
+
+        // Function to edit a post
+        function editPost(post_id, updatedContent) {
+          // Perform the necessary logic to update the post content
+          // This function should handle the actual update of the post on the server or perform any other required actions
+          console.log(`Editing post ${post_id} with new content: ${updatedContent}`);
+          const editButton = postDiv.querySelector("button.btn-primary");
+          saveButton.style.display = "none";
+        }
+
+        // Replace the post element with the textarea and save button
+        postDiv.replaceChild(textarea, postElement);
+        postDiv.appendChild(saveButton);
+
+        }
+
         postsContainer.appendChild(postDiv);
       });
     }
-    
+
     function fetchPosts(user_id) {
       fetch(`/feed/${user_id}?page=${currentPage}`)
         .then((response) => response.json())
         .then((data) => {
+          console.log(data.serialized_posts);
           showPosts(data.serialized_posts);
           numPages = data.paginator.num_pages;
         })
