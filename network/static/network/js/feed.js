@@ -5,8 +5,8 @@
   const nextPageElement = document.getElementById("nextPageBtn");
   previousPageElement.addEventListener("click", handlePreviousPageClick);
   nextPageElement.addEventListener("click", handleNextPageClick);
-
-  checkPreviousButtonVisibility();
+  // Event handler for creating a post
+  document.querySelector('form').addEventListener('submit', handleFormSubmission);
 
   updatePaginationCounter();
 
@@ -41,8 +41,13 @@
       updatePaginationCounter();
       checkNextButtonVisibility();
       checkPreviousButtonVisibility();
+  
       // Add your logic to fetch and display the next page of content
-      fetchPosts(userId); // Fetch next page content using the updated currentPage value
+      if (userId>=0) {
+        fetchPosts(userId); // Fetch next page content using the updated currentPage value
+      } else {
+        fetchFollowingPosts(); // Fetch next page content for following posts
+      }
     }
   }
   
@@ -96,7 +101,7 @@
   }
 
   function fetchFollowingPosts() {
-    fetch(`/following`)
+    fetch(`/following?page=${currentPage}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data.serialized_posts);

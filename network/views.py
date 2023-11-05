@@ -124,7 +124,9 @@ def following(request):
     return JsonResponse(context, safe=False)
 
 def followingposts(request):
+    currentUserId = request.user.id
     return render(request, "network/followingposts.html", {
+        'currentUserId': currentUserId,
     })
 
 @csrf_exempt

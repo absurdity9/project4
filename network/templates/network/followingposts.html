@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block body %}
-<script src="{% static 'network/js/feed.js' %}"></script> 
   <div class="body">
     <div class="row justify-content-center">
       <div class="col-9 mt-2">
@@ -19,14 +18,18 @@
       </div>
     </div>
   </div>
-
+  <script src="{% static 'network/js/feed.js' %}"></script> 
   <script>
     var currentUserId = {{currentUserId}}
-// On load logic
-document.addEventListener('DOMContentLoaded', function () {
-  fetchFollowingPosts();
-  document.querySelector('form').addEventListener('submit', handleFormSubmission);
-  }
-)
+    var currentPage = 1;
+    var numPages = 1;
+    var userId;
+
+    // On load logic
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchFollowingPosts();
+      checkPreviousButtonVisibility();
+      }
+    )
   </script>
 {% endblock %}
