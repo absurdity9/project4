@@ -63,7 +63,7 @@ def userprofile(request, user_id):
     return render(request, "network/userprofile.html", {
         'followers_count': followers_count,
         'following_count': following_count,
-        'user_id': user_id,
+        'user_id': user,
         'username':username,
         'relationship_exists': relationship_exists
     })

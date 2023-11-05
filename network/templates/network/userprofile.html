@@ -27,89 +27,89 @@
       </div>
     </div>
   </div>
+  <script src="{% static 'network/js/feed.js' %}"></script> 
 
-<script>
-var relationship_exists = {{ relationship_exists }};
-var userId = "{{ user_id }}";
-var currentPage = 1;
-var numPages = 1;
+  <script>
+  var relationship_exists = {{ relationship_exists }};
+  var userId = "{{ user_id }}";
+  var currentPage = 1;
+  var numPages = 1;
+  var currentUserId;
 
-// User profile specific
-const unfollowButton = document.getElementById('unfollowbtn');
-const followButton = document.getElementById('follow');
+  // User profile specific
+  const unfollowButton = document.getElementById('unfollowbtn');
+  const followButton = document.getElementById('follow');
 
-followButton.addEventListener('click', function(){
-  console.log("Clicked");
-  fetch(`/addfollow/${userId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}',
-    },
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response data
-    if (data.success) {
-      // Display a success message
-      alert(data.message);
-      // Refresh the page
-      window.location.reload();
-    } else {
-      // Display an error message
-      alert(data.message);
-    }
-  })
-  .catch(error => {
-    // Handle any error that occurs during the request
-    console.error('An error occurred:', error);
+  followButton.addEventListener('click', function(){
+    console.log("Clicked");
+    fetch(`/addfollow/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data
+      if (data.success) {
+        // Display a success message
+        alert(data.message);
+        // Refresh the page
+        window.location.reload();
+      } else {
+        // Display an error message
+        alert(data.message);
+      }
+    })
+    .catch(error => {
+      // Handle any error that occurs during the request
+      console.error('An error occurred:', error);
+    });
   });
-});
 
-unfollowButton.addEventListener('click', function(){
-  console.log("Clicked");
-  fetch(`/removefollow/${userId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}',
-    },
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response data
-    if (data.success) {
-      // Display a success message
-      alert(data.message);
-      // Refresh the page
-      window.location.reload();
-    } else {
-      // Display an error message
-      alert(data.message);
-    }
-  })
-  .catch(error => {
-    // Handle any error that occurs during the request
-    console.error('An error occurred:', error);
+  unfollowButton.addEventListener('click', function(){
+    console.log("Clicked");
+    fetch(`/removefollow/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data
+      if (data.success) {
+        // Display a success message
+        alert(data.message);
+        // Refresh the page
+        window.location.reload();
+      } else {
+        // Display an error message
+        alert(data.message);
+      }
+    })
+    .catch(error => {
+      // Handle any error that occurs during the request
+      console.error('An error occurred:', error);
+    });
   });
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-
-  fetchPosts(userId);
-  checkPreviousButtonVisibility();
-  if(relationship_exists) {
-    // Set follow btn -> display none
-    document.getElementById('follow').style.display = 'none';
-    // Set unfollow btn -> display block  
-    document.getElementById('unfollowbtn').style.display = 'block';
-  } else {
-    // Set follow btn -> display block
-    document.getElementById('follow').style.display = 'block';  
-    // Set unfollow btn -> display none
-    document.getElementById('unfollowbtn').style.display = 'none';
-  }
-});
-
-  </script>
+  document.addEventListener('DOMContentLoaded', function () {
+    fetchPosts(userId);
+    checkPreviousButtonVisibility();
+    if(relationship_exists) {
+      // Hide follow btn 
+      document.getElementById('follow').style.display = 'none';
+      // Show unfollow btn   
+      document.getElementById('unfollowbtn').style.display = 'block';
+    } else {
+      // Set follow btn -> display block
+      document.getElementById('follow').style.display = 'block';  
+      // Set unfollow btn -> display none
+      document.getElementById('unfollowbtn').style.display = 'none';
+    }
+  });
+    </script>
 {% endblock %}
